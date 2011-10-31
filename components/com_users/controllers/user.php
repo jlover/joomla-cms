@@ -53,14 +53,31 @@ class UsersControllerUser extends UsersController
 		$credentials['password'] = $data['password'];
 
 		// Perform the log in.
-		$error = $app->login($credentials, $options);
+		try
+		{
+			$error = $app->login($credentials, $options);
 
-		// Check if the log in succeeded.
-		if (!JError::isError($error)) {
-			$app->setUserState('users.login.form.data', array());
-			$app->redirect(JRoute::_($data['return'], false));
-		} else {
+			// Check if the log in succeeded.
+			// @todo: remove JError
+			if (!JError::isError($error)) {
+				$app->setUserState('users.login.form.data', array());
+				$app->redirect(JRoute::_($data['return'], false));
+			} else {
+				$data['remember'] = (int)$options['remember'];
+				$app->setUserState('users.login.form.data', $data);
+				$app->redirect(JRoute::_('index.php?option=com_users&view=login', false));
+			}
+		}
+		catch (LogException $e)
+		{
+			// @todo: The message is empty :(
+			JFactory::getApplication()->enqueueMessage('A log exception occured: '.$e->getMessage(), 'error');
+
 			$data['remember'] = (int)$options['remember'];
+
+			// Unset the password
+			unset($data['password']);
+
 			$app->setUserState('users.login.form.data', $data);
 			$app->redirect(JRoute::_('index.php?option=com_users&view=login', false));
 		}
