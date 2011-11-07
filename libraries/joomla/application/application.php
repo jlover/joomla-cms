@@ -7,6 +7,8 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
+// This is a test
+
 defined('JPATH_PLATFORM') or die;
 
 jimport('joomla.application.input');
