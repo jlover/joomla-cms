@@ -14,8 +14,6 @@ jimport('joomla.event.dispatcher');
 jimport('joomla.environment.response');
 jimport('joomla.log.log');
 
-// This is a test 
-
 /**
  * Base class for a Joomla! application.
  *
